@@ -625,9 +625,8 @@ public class WriterVisitor implements Visitor {
     @Override
     public Object visitForDoCommand(ForDoCommand ast, Object o) {
         writeLineXML("<ForDoCommand>");
-        ast.I.visit(this, null);
-        ast.E1.visit(this,null);
-        ast.E2.visit(this, null);
+        ast.D.visit(this, null);
+        ast.E.visit(this, null);
         ast.C.visit(this, null);
         writeLineXML("</ForDoCommand>");
         return null;

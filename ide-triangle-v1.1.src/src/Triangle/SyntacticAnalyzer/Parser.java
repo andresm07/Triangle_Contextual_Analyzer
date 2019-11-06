@@ -377,6 +377,7 @@ public class Parser {
             //FOR COMMAND CASE, IMPLEMENTED IN QUARTERNARY FORM.
             case Token.FOR:
             {
+              //PENDIENTE MODIFICACION
               acceptIt();
               Identifier iAST = parseIdentifier();
               accept(Token.IS);

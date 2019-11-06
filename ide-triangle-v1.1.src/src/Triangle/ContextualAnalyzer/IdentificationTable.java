@@ -20,6 +20,7 @@ public final class IdentificationTable {
 
   private int level;
   private IdEntry latest;
+  protected boolean localScope = false; //ADDED ON 11/06/19 BY ANDRES.MIRANDAARIAS@GMAIL.COM
   
 
   public IdentificationTable () {
@@ -34,8 +35,12 @@ public final class IdentificationTable {
 
     level ++;
   }
-
-
+  
+  //OPENLOCALSCOPE ADDED ON 11/06/19 BY ANDRES.MIRANDAARIAS@GMAIL.COM
+  public void openLocalScope(){
+      localScope = true; //Start marking nodes as local
+  }
+  
   // Closes the topmost level in the identification table, discarding
   // all entries belonging to that level.
 
@@ -52,7 +57,26 @@ public final class IdentificationTable {
     this.level--;
     this.latest = entry;
   }
-
+  
+  //CLOSELOCALSCOPE ADDED ON 11/06/19 BY ANDRES.MIRANDAARIAS@GMAIL.COM
+  public void closeLocalScope(){
+      localScope = false; //Stop marking nodes as local
+  }
+  
+  //CLEARLOCALSCOPE ADDED ON 11/06/19 BY ANDRES.MIRANDAARIAS@GMAIL.COM
+  public void clearLocalScope(){
+    //Eliminate last level of nodes marked as local
+    IdEntry entry, local, localDeclaration;
+    entry = this.latest;
+    localDeclaration = this.latest.previous;
+    while(localDeclaration.localLevel != true){
+        local = entry;
+        entry = local.previous;
+        localDeclaration = local.previous;
+    }
+    entry.previous = localDeclaration.previous;
+    this.latest = entry;
+  }
 
   // Makes a new entry in the identification table for the given identifier
   // and attribute. The new entry belongs to the current level.

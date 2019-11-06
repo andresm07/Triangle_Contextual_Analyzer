@@ -22,6 +22,8 @@ public class IdEntry {
   protected Declaration attr;
   protected int level;
   protected IdEntry previous;
+  //ADDED ON 11/06/19 BY ANDRES.MIRANDAARIAS@GMAIL.COM 
+  protected boolean localLevel; //MARKS IF NODE IS LOCAL
   
   IdEntry (String id, Declaration attr, int level, IdEntry previous) {
     this.id = id;

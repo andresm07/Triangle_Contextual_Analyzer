@@ -128,12 +128,27 @@ public final class Checker implements Visitor {
 
   //DOUNTIL CHECKER ADDED
   public Object visitDoUntilCommand(DoUntilCommand ast, Object o){
+    TypeDenoter eType = (TypeDenoter) ast.eAST.visit(this,null);
+    if(!eType.equals(StdEnvironment.booleanType)){
+        reporter.reportError("Boolean expression expected", "", ast.eAST.position);
+    }
+    idTable.openScope();
+    ast.cAST.visit(this,null);
+    idTable.closeScope();
+    ast.eAST.visit(this,null);
     return null;
   }
   
   //DO WHILE CHECKER ADDED.
-  public Object visitDoWhileCommand(DoWhileCommand ast, Object o)
-  {   
+  public Object visitDoWhileCommand(DoWhileCommand ast, Object o){   
+    TypeDenoter eType = (TypeDenoter) ast.eAST.visit(this,null);
+    if(!eType.equals(StdEnvironment.booleanType)){
+        reporter.reportError("Boolean expression expecter", "", ast.eAST.position);
+    }
+    idTable.openScope();
+    ast.cAST.visit(this,null);
+    idTable.closeScope();
+    ast.eAST.visit(this,null);
     return null;
   }
   
@@ -143,7 +158,15 @@ public final class Checker implements Visitor {
 
   //FOR CMD CHECKER ADDED.
   public Object visitForDoCommand(ForDoCommand ast, Object o){
-      return null;
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this,null);
+    if(!(eType instanceof IntTypeDenoter)){
+        reporter.reportError("Wrong expression type. Integer type expected", "", ast.E.position);
+    }
+    idTable.openScope();
+    ast.D.visit(this, null);
+    ast.C.visit(this, null);
+    idTable.closeScope();
+    return null;
   }
   
   
@@ -172,6 +195,12 @@ public final class Checker implements Visitor {
   
   //UNTIL CHECKER ADDED, NOT IMPLEMENTED.
   public Object visitUntilCommand(UntilCommand ast,Object o){
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this,null);
+    if(!eType.equals(StdEnvironment.booleanType)){
+        reporter.reportError("Boolean expression expected", "", ast.E.position);
+    }
+    ast.E.visit(this,null);
+    ast.C.visit(this,null);
     return null;
   }
   
@@ -343,6 +372,26 @@ public final class Checker implements Visitor {
   
   //LOCAL DECL. CHECKER ADDED
   public Object visitLocalDeclaration(LocalDeclaration ast,Object o){
+    idTable.openLocalScope(); //Define declarations as local
+    if(ast.dcl1 instanceof LocalDeclaration){
+      visitLocalDeclarationNested((LocalDeclaration)ast.dcl1,o); //Validate if asignments are nested
+    }
+    else{
+        ast.dcl1.visit(this, null);
+    }
+    idTable.closeLocalScope();
+    ast.dcl2.visit(this, null);
+    idTable.clearLocalScope();
+    if(ast.dcl1 instanceof LocalDeclaration){
+        idTable.clearLocalScope();
+    }
+    return null;
+  }
+  
+  //VISITLOCALDECLARATIONNESTED ADDED ON 11/06/19 BY ANDRES.MIRANDAARIAS@GMAIL.COM
+  public Object visitLocalDeclarationNested(LocalDeclaration dcl, Object o){
+      dcl.dcl1.visit(this, null);
+      dcl.dcl2.visit(this, null);
       return null;
   }
 
@@ -360,7 +409,9 @@ public final class Checker implements Visitor {
 
   //RECURSIVE DECL CHECKER ADDED.
   public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o){
-    return(null);
+    //PENDIENTE MODIFICACION
+    //ast.procFuncAST.visit(this, "flag");
+    return null;
   }
   
   public Object visitSequentialDeclaration(SequentialDeclaration ast, Object o) {
@@ -394,6 +445,11 @@ public final class Checker implements Visitor {
 
   //VAR DECL. INIT CHECKER ADDED. on 10/14/19 by andres.mirandaarias@gmail.com
   public Object visitVarDeclarationInit(VarDeclarationInit ast, Object o){
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+    idTable.enter(ast.I.spelling, ast);
+    if(ast.duplicated){
+        reporter.reportError("Identifier \"%\" already declared", ast.I.spelling, ast.position);
+    }
     return null;
   }
 

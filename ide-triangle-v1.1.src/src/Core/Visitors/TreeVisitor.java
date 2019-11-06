@@ -119,7 +119,7 @@ public class TreeVisitor implements Visitor {
     
     //FOR TREE VISITOR ADDED.
     public Object visitForDoCommand(ForDoCommand ast, Object o){
-        return(createQuaternary("For Command",ast.I,ast.E1,ast.E2,ast.C));
+        return(createTernary("For Command",ast.D,ast.E,ast.C));
     }
     
     public Object visitIfCommand(IfCommand ast, Object obj) {

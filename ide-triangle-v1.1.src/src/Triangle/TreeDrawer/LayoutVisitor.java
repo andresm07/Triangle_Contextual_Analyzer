@@ -124,7 +124,7 @@ public class LayoutVisitor implements Visitor {
   
   //FOR CMD LAYOUT ADDED
   public Object visitForDoCommand(ForDoCommand ast, Object o) {
-    return layoutQuaternary("ForDoCom.", ast.I, ast.E1, ast.E2, ast.C);
+    return layoutTernary("ForDoCom.", ast.D, ast.E, ast.C);
   }
 
   public Object visitIfCommand(IfCommand ast, Object obj) {

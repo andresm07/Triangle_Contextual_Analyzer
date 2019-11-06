@@ -138,9 +138,8 @@ public class TableVisitor implements Visitor {
   //FORCOMMAND TABLE VISITOR ADDED
   public Object visitForDoCommand(ForDoCommand ast, Object o)
   {
-      ast.I.visit(this,null);
-      ast.E1.visit(this, null);
-      ast.E2.visit(this, null);
+      ast.D.visit(this, null);
+      ast.E.visit(this, null);
       ast.C.visit(this, null);
       return null;
   }
