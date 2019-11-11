@@ -46,6 +46,7 @@ public interface Visitor {
   // Declarations
   public abstract Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object o);
   public abstract Object visitConstDeclaration(ConstDeclaration ast, Object o);
+  public abstract Object visitForDeclaration (ForDeclaration ast,Object o);// For Declaration added
   public abstract Object visitFuncDeclaration(FuncDeclaration ast, Object o);
   public abstract Object visitLocalDeclaration(LocalDeclaration ast, Object o);//LOCAL DECLARATION VISITOR ADDED.
   public abstract Object visitProcDeclaration(ProcDeclaration ast, Object o);

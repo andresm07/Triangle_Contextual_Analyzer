@@ -48,6 +48,7 @@ import Triangle.AbstractSyntaxTrees.EmptyCommand;
 import Triangle.AbstractSyntaxTrees.EmptyExpression;
 import Triangle.AbstractSyntaxTrees.EmptyFormalParameterSequence;
 import Triangle.AbstractSyntaxTrees.ErrorTypeDenoter;
+import Triangle.AbstractSyntaxTrees.ForDeclaration;
 import Triangle.AbstractSyntaxTrees.ForDoCommand;//FOR CMD ADDED
 import Triangle.AbstractSyntaxTrees.FuncActualParameter;
 import Triangle.AbstractSyntaxTrees.FuncDeclaration;
@@ -310,6 +311,11 @@ public final class Encoder implements Visitor {
     return new Integer(extraSize);
   }
 
+  //added forDecl
+  public Object visitForDeclaration(ForDeclaration ast, Object o){
+      return null;
+  }
+  
   public Object visitFuncDeclaration(FuncDeclaration ast, Object o) {
     Frame frame = (Frame) o;
     int jumpAddr = nextInstrAddr;

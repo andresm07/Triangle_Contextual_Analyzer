@@ -40,6 +40,7 @@ import Triangle.AbstractSyntaxTrees.EmptyCommand;
 import Triangle.AbstractSyntaxTrees.EmptyExpression;
 import Triangle.AbstractSyntaxTrees.EmptyFormalParameterSequence;
 import Triangle.AbstractSyntaxTrees.ErrorTypeDenoter;
+import Triangle.AbstractSyntaxTrees.ForDeclaration;
 import Triangle.AbstractSyntaxTrees.ForDoCommand;//FOR CMD ADDED
 import Triangle.AbstractSyntaxTrees.FuncActualParameter;
 import Triangle.AbstractSyntaxTrees.FuncDeclaration;
@@ -204,6 +205,11 @@ public class LayoutVisitor implements Visitor {
     return layoutBinary("ConstDecl.", ast.I, ast.E);
   }
 
+  //ForDecl. added
+  public Object visitForDeclaration(ForDeclaration ast, Object obj){
+      return layoutBinary("ForDecl.",ast.I,ast.E);
+  }
+  
   public Object visitFuncDeclaration(FuncDeclaration ast, Object obj) {
     return layoutQuaternary("FuncDecl.", ast.I, ast.FPS, ast.T, ast.E);
   }

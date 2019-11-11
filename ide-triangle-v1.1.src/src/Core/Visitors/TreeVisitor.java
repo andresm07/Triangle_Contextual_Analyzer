@@ -28,6 +28,7 @@ import Triangle.AbstractSyntaxTrees.EmptyCommand;
 import Triangle.AbstractSyntaxTrees.EmptyExpression;
 import Triangle.AbstractSyntaxTrees.EmptyFormalParameterSequence;
 import Triangle.AbstractSyntaxTrees.ErrorTypeDenoter;
+import Triangle.AbstractSyntaxTrees.ForDeclaration;
 import Triangle.AbstractSyntaxTrees.ForDoCommand;
 import Triangle.AbstractSyntaxTrees.FuncActualParameter;
 import Triangle.AbstractSyntaxTrees.FuncDeclaration;
@@ -201,6 +202,11 @@ public class TreeVisitor implements Visitor {
         return(createBinary("Constant Declaration", ast.I, ast.E));
     }
     
+    //added forDeclaration tree visitor
+    public Object visitForDeclaration (ForDeclaration ast,Object obj){
+        return(createBinary("For Declaration", ast.I,ast.E));
+    }    
+
     public Object visitFuncDeclaration(FuncDeclaration ast, Object obj) {
         return(createQuaternary("Function Declaration", ast.I, ast.FPS, ast.T, ast.E));
     }

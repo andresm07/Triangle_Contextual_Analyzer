@@ -28,6 +28,7 @@ import Triangle.AbstractSyntaxTrees.EmptyCommand;
 import Triangle.AbstractSyntaxTrees.EmptyExpression;
 import Triangle.AbstractSyntaxTrees.EmptyFormalParameterSequence;
 import Triangle.AbstractSyntaxTrees.ErrorTypeDenoter;
+import Triangle.AbstractSyntaxTrees.ForDeclaration;
 import Triangle.AbstractSyntaxTrees.ForDoCommand;//FOR COMMAND ADDED
 import Triangle.AbstractSyntaxTrees.FuncActualParameter;
 import Triangle.AbstractSyntaxTrees.FuncDeclaration;
@@ -286,6 +287,33 @@ public class TableVisitor implements Visitor {
 
       return(null);
   }
+    
+  //added forDecl table visitor  
+  public Object visitForDeclaration(ForDeclaration ast,Object obj){
+      String name = ast.I.spelling;
+      String type = "N/A";
+      try {
+        int size = (ast.entity!=null?ast.entity.size:0);
+        int level = -1;
+        int displacement = -1;
+        int value = -1;
+      
+        if (ast.entity instanceof KnownValue) {
+              type = "KnownValue";
+              value = ((KnownValue)ast.entity).value;
+          }
+          else if (ast.entity instanceof UnknownValue) {
+              type = "UnknownValue";
+              level = ((UnknownValue)ast.entity).address.level;
+              displacement = ((UnknownValue)ast.entity).address.displacement;
+          }
+          addIdentifier(name, type, size, level, displacement, value);
+      } catch (NullPointerException e) { }
+      
+      ast.I.visit(this, null);
+      ast.E.visit(this,null);
+      return null;
+  }  
   
   public Object visitFuncDeclaration(FuncDeclaration ast, Object o) {    
       try {

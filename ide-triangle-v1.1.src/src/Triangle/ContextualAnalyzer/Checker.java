@@ -41,6 +41,7 @@ import Triangle.AbstractSyntaxTrees.EmptyExpression;
 import Triangle.AbstractSyntaxTrees.EmptyFormalParameterSequence;
 import Triangle.AbstractSyntaxTrees.ErrorTypeDenoter;
 import Triangle.AbstractSyntaxTrees.FieldTypeDenoter;
+import Triangle.AbstractSyntaxTrees.ForDeclaration;//ForDecl added
 import Triangle.AbstractSyntaxTrees.ForDoCommand;//FOR CMD ADDED
 import Triangle.AbstractSyntaxTrees.FormalParameter;
 import Triangle.AbstractSyntaxTrees.FormalParameterSequence;
@@ -351,6 +352,20 @@ public final class Checker implements Visitor {
     if (ast.duplicated)
       reporter.reportError ("identifier \"%\" already declared",
                             ast.I.spelling, ast.position);
+    return null;
+  }
+  
+  //added forDecl checker
+  public Object visitForDeclaration(ForDeclaration ast, Object o){
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+    ConstDeclaration cAst = new ConstDeclaration(ast.I, ast.E, ast.position);
+    idTable.enter(cAst.I.spelling, cAst);
+    if (cAst.duplicated)
+        reporter.reportError ("identifier \"%\" already declared",
+                            cAst.I.spelling, cAst.position);
+    if(!(eType instanceof IntTypeDenoter))
+        reporter.reportError ("wrong expression type, must be an integer type",
+                              "", ast.E.position);
     return null;
   }
 

@@ -226,7 +226,17 @@ public class WriterVisitor implements Visitor {
         writeLineXML("</ConstDeclaration>");
         return null;
     }
-
+    
+    //added ForDeclaration
+    @Override
+    public Object visitForDeclaration(ForDeclaration ast,Object obj){
+        writeLineXML("<ForDeclaration>");
+        ast.I.visit(this, null);
+        ast.E.visit(this, null);
+        writeLineXML("</ForDeclaration>");
+        return null;
+    }
+    
     @Override
     public Object visitFuncDeclaration(FuncDeclaration ast, Object obj) {
         writeLineXML("<FuncDeclaration>");

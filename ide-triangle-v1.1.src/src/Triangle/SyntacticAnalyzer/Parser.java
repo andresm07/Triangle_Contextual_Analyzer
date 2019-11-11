@@ -39,6 +39,7 @@ import Triangle.AbstractSyntaxTrees.EmptyCommand;
 import Triangle.AbstractSyntaxTrees.EmptyFormalParameterSequence;
 import Triangle.AbstractSyntaxTrees.Expression;
 import Triangle.AbstractSyntaxTrees.FieldTypeDenoter;
+import Triangle.AbstractSyntaxTrees.ForDeclaration; //ADDED CLASS FORDECLARATION
 import Triangle.AbstractSyntaxTrees.ForDoCommand; //ADDED CLASS FORDOCOMMAND
 import Triangle.AbstractSyntaxTrees.FormalParameter;
 import Triangle.AbstractSyntaxTrees.FormalParameterSequence;
@@ -374,21 +375,18 @@ public class Parser {
                     }
                     break;
             }
-            //FOR COMMAND CASE, IMPLEMENTED IN QUARTERNARY FORM.
+            //FOR COMMAND CASE, TERNARY FORM.
             case Token.FOR:
             {
-              //PENDIENTE MODIFICACION
               acceptIt();
-              Identifier iAST = parseIdentifier();
-              accept(Token.IS);
-              Expression eAST= parseExpression();
+              Declaration dAST = parseForDeclaration();
               accept(Token.TO);
-              Expression e2AST=parseExpression();
+              Expression eAST=parseExpression();
               accept(Token.DO);
               commandAST = parseCommand();
               accept(Token.REPEAT);
               finish(commandPos);
-              commandAST = new ForDoCommand(iAST, eAST, e2AST, commandAST, commandPos);//FOR COMMAND CLASS
+              commandAST = new ForDoCommand(dAST, eAST, commandAST, commandPos);//FOR COMMAND CLASS
             }
             break;
         }
@@ -662,6 +660,21 @@ public class Parser {
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+  
+//ADDED parseForDeclaration to make forDo command ternary 
+Declaration parseForDeclaration() throws SyntaxError{
+    Declaration declarationAST = null;
+    
+    SourcePosition declarationPos = new SourcePosition();
+    start(declarationPos);
+    Identifier iAST = parseIdentifier();
+    accept(Token.IS);
+    Expression eAST = parseExpression();
+    finish(declarationPos);
+    declarationAST = new ForDeclaration(iAST, eAST, declarationPos);
+      return declarationAST;
+}
+  
 //DECLARATION MODIFIED, ACCORDING BY THE SPEC.   
 Declaration parseDeclaration() throws SyntaxError {
     Declaration declarationAST = null; // in case there's a syntactic error
