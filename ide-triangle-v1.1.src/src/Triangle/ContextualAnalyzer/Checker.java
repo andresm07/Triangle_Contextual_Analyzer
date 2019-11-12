@@ -144,7 +144,7 @@ public final class Checker implements Visitor {
   public Object visitDoWhileCommand(DoWhileCommand ast, Object o){   
     TypeDenoter eType = (TypeDenoter) ast.eAST.visit(this,null);
     if(!eType.equals(StdEnvironment.booleanType)){
-        reporter.reportError("Boolean expression expecter", "", ast.eAST.position);
+        reporter.reportError("Boolean expression expected", "", ast.eAST.position);
     }
     idTable.openScope();
     ast.cAST.visit(this,null);
@@ -200,8 +200,9 @@ public final class Checker implements Visitor {
     if(!eType.equals(StdEnvironment.booleanType)){
         reporter.reportError("Boolean expression expected", "", ast.E.position);
     }
-    ast.E.visit(this,null);
+    idTable.openScope();
     ast.C.visit(this,null);
+    idTable.closeScope();
     return null;
   }
   
@@ -209,7 +210,9 @@ public final class Checker implements Visitor {
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
     if (! eType.equals(StdEnvironment.booleanType))
       reporter.reportError("Boolean expression expected here", "", ast.E.position);
+    idTable.openScope();
     ast.C.visit(this, null);
+    idTable.closeScope();
     return null;
   }
 
