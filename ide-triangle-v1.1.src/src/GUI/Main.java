@@ -59,7 +59,7 @@ public class Main extends javax.swing.JFrame {
         } catch (Exception e) { }
         
         initComponents();
-        setSize(640, 480);
+        setSize(800, 700);
         setVisible(true);
         directory = new File(".");
     }
@@ -620,7 +620,7 @@ public class Main extends javax.swing.JFrame {
                 output.setDelegate(delegateTAMCode);
                 //disassembler.Disassemble(desktopPane.getSelectedFrame().getTitle().replace(".tri", ".tam"));
                 ((FileFrame)desktopPane.getSelectedFrame()).setTree((DefaultMutableTreeNode)treeVisitor.visitProgram(compiler.getAST(), null));
-                //((FileFrame)desktopPane.getSelectedFrame()).setTable(tableVisitor.getTable(compiler.getAST()));
+                ((FileFrame)desktopPane.getSelectedFrame()).setTable(tableVisitor.getTable(compiler.getAST()));
                 
                 //create HTML file of the code
                 HTMLWriter htmlWriter = new HTMLWriter(desktopPane.getSelectedFrame().getTitle().replace(".tri", "html"));
