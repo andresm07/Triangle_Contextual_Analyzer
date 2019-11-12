@@ -18,7 +18,7 @@ public class HTMLWriter {
     public void write(String html) {
         
         try {
-            FileWriter fileWriter = new FileWriter(fileName + ".html");
+            FileWriter fileWriter = new FileWriter(fileName);
 
             fileWriter.write("<!DOCTYPE html>\n" +
 "<html>\n" +
