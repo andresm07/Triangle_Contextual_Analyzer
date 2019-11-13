@@ -94,8 +94,14 @@ import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
 import Triangle.SyntacticAnalyzer.SourcePosition;
+import java.util.ArrayList;
 
 public final class Checker implements Visitor {
+    //ATTRIBUTES IMPLEMENTED FOR RECURSIVE DECLARATION CONTEXTUAL ANALYSIS 
+    //ADDED ON 11/12/19 BY ANDRES.MIRANDAARIAS@GMAIL.COM
+    private ArrayList<Object> astList = new ArrayList<>();
+    private boolean visitRecursive = false;
+    private int nestedLevel = 0;
 
   // Commands
 
@@ -371,63 +377,28 @@ public final class Checker implements Visitor {
                               "", ast.E.position);
     return null;
   }
-  /*
+
   public Object visitFuncDeclaration(FuncDeclaration ast, Object o) {
     ast.T = (TypeDenoter) ast.T.visit(this, null);
     idTable.enter (ast.I.spelling, ast); // permits recursion
-    if (ast.duplicated)
+    if (ast.duplicated){
       reporter.reportError ("identifier \"%\" already declared",
                             ast.I.spelling, ast.position);
-    idTable.openScope();
-    ast.FPS.visit(this, null);
-    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
-    idTable.closeScope();
-    if (! ast.T.equals(eType))
-      reporter.reportError ("body of function \"%\" has wrong type",
-                            ast.I.spelling, ast.E.position);
-    return null;
-  }
-  */
-  
-  //REVISION PENDING
-  public Object visitFuncDeclaration(FuncDeclaration ast, Object o){
-      if(o != null){
-          String flag = (String) o;
-          if(flag.equals("enter")){
-              ast.T = (TypeDenoter) ast.T.visit(this,null);
-              idTable.enter(ast.I.spelling, ast); //permits recursion
-              if(ast.duplicated){
-                  reporter.reportError("identifier \"%\" already declared", ast.I.spelling, ast.position);
-              }
-          }
-          else{
-              idTable.openScope();
-              ast.FPS.visit(this, null);
-              TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
-              idTable.closeScope();
-              if(!ast.T.equals(eType)){
-                  reporter.reportError ("body of function \"%\" has wrong type",
-                                    ast.I.spelling, ast.E.position);
-              }
-          }
-      }
-      else if(o == null){
-          ast.T = (TypeDenoter) ast.T.visit(this, null);
-          idTable.enter(ast.I.spelling, ast); //permits recursion
-          if(ast.duplicated){
-              reporter.reportError ("identifier \"%\" already declared",
-                                ast.I.spelling, ast.position);
-          }
-          idTable.openScope();
-          ast.FPS.visit(this, null);
-          TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
-          idTable.closeScope();
-          if(!ast.T.equals(eType)){
-              reporter.reportError ("body of function \"%\" has wrong type",
+    }
+    //CHANGES IMPLEMENTED
+    if(visitRecursive){
+        astList.add(ast);
+    }
+    else{
+        idTable.openScope();
+        ast.FPS.visit(this, null);
+        TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+        idTable.closeScope();
+        if (! ast.T.equals(eType))
+          reporter.reportError ("body of function \"%\" has wrong type",
                                 ast.I.spelling, ast.E.position);
-          }
-      }
-      return null;
+    }
+    return null;
   }
   
   //LOCAL DECL. CHECKER ADDED
@@ -455,57 +426,59 @@ public final class Checker implements Visitor {
       return null;
   }
   
-  /*
   public Object visitProcDeclaration(ProcDeclaration ast, Object o) {
     idTable.enter (ast.I.spelling, ast); // permits recursion
-    if (ast.duplicated)
+    if (ast.duplicated){
       reporter.reportError ("identifier \"%\" already declared",
-                            ast.I.spelling, ast.position);
-    idTable.openScope();
-    ast.FPS.visit(this, null);
-    ast.C.visit(this, null);
-    idTable.closeScope();
+                            ast.I.spelling, ast.position); 
+    }
+    //CHANGES IMPLEMENTED 
+    if(visitRecursive){
+        astList.add(ast);
+    }
+    else{
+        idTable.openScope();
+        ast.FPS.visit(this, null);
+        ast.C.visit(this, null);
+        idTable.closeScope();
+    }
     return null;
-  }
-  */
-  
-  //REVISION PENDING
-  public Object visitProcDeclaration(ProcDeclaration ast, Object o){
-      if(o != null){
-          String flag = (String) o;
-          if(flag.equals("enter")){
-              idTable.enter(ast.I.spelling, ast); // permits recursion
-              if(ast.duplicated){
-                  reporter.reportError ("identifier \"%\" already declared",
-                                ast.I.spelling, ast.position);
-              }
-          }
-          else{
-              idTable.openScope();
-              ast.FPS.visit(this, null);
-              ast.C.visit(this, null);
-              idTable.closeScope();
-          }
-      }
-      else if(o == null){
-          idTable.enter(ast.I.spelling, ast); //permits recursion
-          if(ast.duplicated){
-              reporter.reportError ("identifier \"%\" already declared",
-                                ast.I.spelling, ast.position);
-          }
-          idTable.openScope();
-          ast.FPS.visit(this, null);
-          ast.C.visit(this, null);
-          idTable.closeScope();
-      }
-      return null;
   }
 
   //RECURSIVE DECL CHECKER ADDED.
   public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o){
     //PENDIENTE MODIFICACION
-    ast.procFuncAST.visit(this, "flag");
+    visitRecursive = true;
+    nestedLevel++;
+    ast.procFuncAST.visit(this, null);
+    nestedLevel--;
+    if(nestedLevel == 0){
+        visitRecursive = false;
+        visitRecursiveDeclarationNested();
+    }
     return null;
+  }
+  
+  //IMPLEMENTED FOR RECURSIVE DECLARATION CONTEXTUAL ANALYSIS ON 11/12/19 BY ANDRES.MIRANDAARIAS@GMAIL.COM
+  public void visitRecursiveDeclarationNested(){
+      for(Object ast : astList){
+          if(ast instanceof ProcDeclaration){
+            idTable.openScope();
+            ((ProcDeclaration)ast).FPS.visit(this, null);
+            ((ProcDeclaration)ast).C.visit(this, null);
+            idTable.closeScope();
+          }
+          else if(ast instanceof FuncDeclaration){
+              idTable.openScope();
+              ((FuncDeclaration)ast).FPS.visit(this, null);
+              TypeDenoter eType = (TypeDenoter) ((FuncDeclaration)ast).T.visit(this, null);
+              idTable.closeScope();
+              if(!((FuncDeclaration)ast).T.equals(eType)){
+                  reporter.reportError("body of function \"%\" has wrong type", ((FuncDeclaration)ast).I.spelling, ((FuncDeclaration)ast).E.position);
+              }
+          }
+      }
+      astList.clear();
   }
   
   public Object visitSequentialDeclaration(SequentialDeclaration ast, Object o) {
