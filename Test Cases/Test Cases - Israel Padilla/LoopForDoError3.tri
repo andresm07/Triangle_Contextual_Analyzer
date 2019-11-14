@@ -1,0 +1,8 @@
+let
+  var x : Boolean
+in
+  loop for i ~ x to 10 do 
+    skip
+  repeat
+end
+!Error X no es un entero

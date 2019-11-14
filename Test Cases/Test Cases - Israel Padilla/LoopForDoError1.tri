@@ -1,0 +1,4 @@
+loop for i ~ n to 10 do 
+  skip
+repeat
+!Error n no esta declarado, no es entero

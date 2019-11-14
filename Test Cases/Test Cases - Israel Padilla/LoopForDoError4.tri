@@ -1,0 +1,8 @@
+let
+  var d : Boolean
+in
+  loop for i ~ 1 to d do
+    skip
+  repeat
+end
+!Error d no es un entero
