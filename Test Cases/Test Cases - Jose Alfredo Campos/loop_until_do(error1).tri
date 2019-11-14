@@ -1,0 +1,2 @@
+loop until 5 do skip repeat
+!ERROR

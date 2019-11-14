@@ -1,0 +1,2 @@
+loop while 5=5 do skip repeat
+!OK

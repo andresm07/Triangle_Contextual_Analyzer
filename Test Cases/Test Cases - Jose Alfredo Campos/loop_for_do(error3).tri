@@ -1,0 +1,2 @@
+loop for id ~ 3 to id do skip repeat
+!ERROR

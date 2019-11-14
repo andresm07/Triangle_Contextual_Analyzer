@@ -1,0 +1,7 @@
+loop for id ~ 3 to 5 do 
+let 
+    const i ~ id
+in
+    skip
+end repeat
+!OK
