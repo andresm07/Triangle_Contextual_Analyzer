@@ -408,10 +408,10 @@ public final class Checker implements Visitor {
       visitLocalDeclarationNested((LocalDeclaration)ast.dcl1,o); //Validate if asignments are nested
     }
     else{
-        ast.dcl1.visit(this, null);
+        ast.dcl1.visit(this, o);
     }
     idTable.closeLocalScope();
-    ast.dcl2.visit(this, null);
+    ast.dcl2.visit(this, o);
     idTable.clearLocalScope();
     if(ast.dcl1 instanceof LocalDeclaration){
         idTable.clearLocalScope();
@@ -420,9 +420,9 @@ public final class Checker implements Visitor {
   }
   
   //VISITLOCALDECLARATIONNESTED ADDED ON 11/06/19 BY ANDRES.MIRANDAARIAS@GMAIL.COM
-  public Object visitLocalDeclarationNested(LocalDeclaration dcl, Object o){
-      dcl.dcl1.visit(this, null);
-      dcl.dcl2.visit(this, null);
+  public Object visitLocalDeclarationNested(LocalDeclaration ast, Object o){
+      ast.dcl1.visit(this, o);
+      ast.dcl2.visit(this, o);
       return null;
   }
   

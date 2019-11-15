@@ -654,7 +654,11 @@ public class WriterVisitor implements Visitor {
 
     @Override
     public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLineXML("<LocalDeclaration>");
+        ast.dcl1.visit(this, null);
+        ast.dcl2.visit(this, null);
+        writeLineXML("</LocalDeclaration>");
+        return null;
     }
     
 

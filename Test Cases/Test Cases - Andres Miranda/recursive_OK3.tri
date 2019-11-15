@@ -1,0 +1,25 @@
+let
+
+  recursive
+
+    func F() : Integer ~ 10
+
+  and
+
+    proc P (x : Integer) ~
+
+        putint(x + T()) end
+
+  and
+
+    func T () : Integer ~ F()
+
+  end;
+
+  var x : Integer
+
+in
+
+  x := F()
+
+end

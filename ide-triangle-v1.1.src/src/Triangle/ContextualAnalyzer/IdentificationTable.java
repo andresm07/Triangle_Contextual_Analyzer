@@ -100,8 +100,12 @@ public final class IdentificationTable {
     }
 
     attr.duplicated = present;
-    entry = new IdEntry(id, attr, this.level, this.latest);
-
+    if(localScope){
+        entry = new IdEntry(id, attr, this.level, this.latest, true);
+    }
+    else{
+        entry = new IdEntry(id, attr, this.level, this.latest, false);
+    }
     this.latest = entry;
   }
 

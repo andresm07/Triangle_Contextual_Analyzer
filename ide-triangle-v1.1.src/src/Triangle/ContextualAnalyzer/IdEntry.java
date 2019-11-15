@@ -25,12 +25,12 @@ public class IdEntry {
   //ADDED ON 11/06/19 BY ANDRES.MIRANDAARIAS@GMAIL.COM 
   protected boolean localLevel; //MARKS IF NODE IS LOCAL
   
-  IdEntry (String id, Declaration attr, int level, IdEntry previous) {
+  IdEntry (String id, Declaration attr, int level, IdEntry previous, boolean localLevel) {
     this.id = id;
     this.attr = attr;
     this.level = level;
     this.previous = previous;
-    
+    this.localLevel = localLevel;
   }
 
 }
